@@ -139,6 +139,28 @@ void excluirOcorrencias(lista_lig_din*l, int ch) {
     }
 }
 
+//Dada uma lista l1, efetuar uma cópia, retornando o resultado
+lista_lig_din* copia(lista_lig_din*l1) {
+    lista_lig_din resp;
+    resp.inicio = NULL;
+    No* fim = NULL; //vai apontar para um fim
+
+    No* p = l1->inicio;
+
+    while(p) {
+        No* novo = (No*)malloc(sizeof(No));
+        novo->chave = p->chave;
+        novo->prox = NULL; // não novo->prox = p->prox;
+
+        if(fim) fim->prox = novo;
+        else resp.inicio = novo;
+
+        fim = novo; //fim só aponta para uma variavel novo
+        p = p->prox;
+    }//end while
+    return(&resp);
+}
+
 //excluir o 1° elemento
 void exluirPrimeiro(lista_lig_din* l) {
     //usar o Free para liberar esse espaço
