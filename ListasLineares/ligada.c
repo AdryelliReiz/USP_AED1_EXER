@@ -9,6 +9,15 @@ typedef struct {
 } registro;
 
 typedef struct {
+    int chave;
+} registro2;
+
+typedef struct {
+    registro2 A[MAX];
+    int nElem
+} lista_seq;
+
+typedef struct {
     int inicio;
     int dispo;
     registro A[MAX];
@@ -94,13 +103,13 @@ int obterEndereço(lista_ligada_estatica* l) {
 
     return resp;
 }
-
+//SLA ONDE TÀ INSERINDO AQuI
 bool inserir(lista_ligada_estatica*l, int ch) {
     int ant;
     int atual = busca(l, ch, &ant);
     if(atual != -1) return false; //em caso de já existir
 
-    int novo = obterEndereço(l);
+    int novo = obterEndereço(&l);
     if(novo == -1) return false; //vetor cheio
 
     l->A[novo].chave = ch;
@@ -123,6 +132,30 @@ bool inserir(lista_ligada_estatica*l, int ch) {
     }
 
     return true;
+}
+
+//UMA VERSÂO MEIO DIFERENTE (N SEI SE A DE CIMA TÁ CERTA)
+bool anexar(lista_ligada_estatica *l, int ch) {
+    int novo = obterEndereço(&l);
+
+    if(novo == -1)  return false; // lista cheia
+
+    l->A[novo].chave = ch;
+    l->A[novo].prox = -1;
+
+    int i = l->inicio;
+    int fim = -1;
+
+    while(i != -1) {
+        fim = i;
+        i = l->A[i].prox;
+    }
+
+    if(fim > -1) {
+        l->A[fim].prox = novo;
+    } else {
+        l->inicio = novo;
+    }
 }
 
 bool moverParaFrente(lista_ligada_estatica*l, int i, int ant) {
@@ -157,6 +190,21 @@ bool moverParaTras(lista_ligada_estatica* l, int i) {
     l->A[anterior].prox = l->A[i].prox;
     l->A[ultimo].prox = i;
     l->A[i].prox = -1;
+
+    return true;
+}
+
+bool listasIguais(lista_seq *l1, lista_ligada_estatica *l2) {
+    int i1 = 0; //seq
+    int i2 = l2->inicio;//lig
+
+    while(i2 != -1 && i1 < l1->nElem) {
+        if(l1->A[i1].chave != l2->A[i2].chave) return false;
+        i1 ++;
+        i2 = l2->A[i2].prox;
+    }
+
+    if(i1 < l1->nElem || i2 != -1) return false; //tamanhos diferentes
 
     return true;
 }
