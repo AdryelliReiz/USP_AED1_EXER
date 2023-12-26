@@ -8,6 +8,20 @@ typedef struct s {
     struct s * dir;
 } NO;
 
+NO* buscaOrdenada(NO* raiz, int ch) {
+    NO* atual = raiz;
+
+    while(atual) {
+        if(atual->chave == ch) return atual;
+
+        if(atual->chave > ch) {
+            atual = atual->esq;
+        } else atual = atual->dir;
+    }
+
+    return NULL;
+}
+
 
 int main() {
     NO* raiz = (NO*) malloc(sizeof(NO));
